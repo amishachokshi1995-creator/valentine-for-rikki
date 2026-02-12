@@ -28,7 +28,6 @@ body::before {
     z-index: -1;
 }
 
-/* Content */
 .container {
     margin-top: 15%;
 }
@@ -51,6 +50,7 @@ button {
 .yes-btn {
     background: white;
     color: #ff4b7d;
+    transform: scale(1);
 }
 
 .no-btn {
@@ -104,7 +104,7 @@ button {
 
 <body>
 
-<!-- Romantic Background Music -->
+<!-- Background Music -->
 <audio id="bgMusic" loop>
     <source src="song.mp3" type="audio/mpeg">
 </audio>
@@ -113,8 +113,8 @@ button {
     <h1>Rikki 💖</h1>
     <h2>Will You Be My Forever Valentine?</h2>
 
-    <button class="yes-btn" id="yesBtn" onclick="sayYes()">Yes 💕</button>
-    <button class="no-btn" id="noBtn" onmouseover="moveNo()">No 😜</button>
+    <button class="yes-btn" id="yesBtn">Yes 💕</button>
+    <button class="no-btn" id="noBtn">No 😜</button>
 
     <div class="popup" id="message">
         From the day you became mine,  
@@ -131,22 +131,33 @@ button {
 </div>
 
 <script>
+
 let yesScale = 1;
+const music = document.getElementById("bgMusic");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const message = document.getElementById("message");
 
-function sayYes() {
-    document.getElementById("message").style.display = "block";
+/* 🎵 Play music on FIRST interaction (mobile safe) */
+document.addEventListener("click", function () {
+    music.play().catch(() => {});
+}, { once: true });
+
+/* Yes Button */
+yesBtn.addEventListener("click", function () {
+    message.style.display = "block";
     createConfetti();
-}
+});
 
-function moveNo() {
-    const noBtn = document.getElementById("noBtn");
+/* No Button Runs + Yes Grows */
+noBtn.addEventListener("mouseover", function () {
     noBtn.style.position = "absolute";
     noBtn.style.top = Math.random() * window.innerHeight + "px";
     noBtn.style.left = Math.random() * window.innerWidth + "px";
 
     yesScale += 0.2;
-    document.getElementById("yesBtn").style.transform = "scale(" + yesScale + ")";
-}
+    yesBtn.style.transform = "scale(" + yesScale + ")";
+});
 
 /* Floating Hearts */
 function createHeart() {
@@ -176,6 +187,7 @@ function createConfetti() {
         setTimeout(() => confetti.remove(), 3000);
     }
 }
+
 </script>
 
 </body>
